@@ -115,7 +115,7 @@ label_usingModel = tk.Label(text='使用模型')
 label_usingModel.place(x=0, y=60)
 var = tk.StringVar()
 usingModel = tkinter.ttk.Combobox(window, textvariable=var)
-usingModel['value'] = ('tiny', 'base', 'small', 'medium', 'large')
+usingModel['value'] = ('tiny', 'base', 'small', 'medium', 'large', 'large-v1', 'large-v2')
 usingModel.current(2)
 usingModel.place(x=60, y=60)
 
