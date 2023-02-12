@@ -7,6 +7,7 @@ from tkinter import messagebox
 import subprocess
 
 import torch
+import time
 
 #easygui.fileopenbox()
 
@@ -56,6 +57,8 @@ def process():
         messagebox.showerror(title="錯誤", message='未選擇音檔')
         return 0
 
+    start = time.time()
+
     commandStr = "venv\\Scripts\\whisper "
     
     commandStr = commandStr + '"%s"'%File
@@ -66,7 +69,7 @@ def process():
         commandStr = commandStr + " --language %s "%languageInput
 
     deviceInput = deviceDecode()
-    commandStr = commandStr + " --device %s "%deviceInput
+    commandStr = commandStr + " --device %s --fp16 False"%deviceInput
 
     commandStr = commandStr + " --model %s "%usingModel.get()
 
@@ -84,7 +87,9 @@ def process():
     out = subprocess.Popen(commandStr)
     (out, err) = out.communicate()
 
-    messagebox.showinfo(title="訊息", message="處理完成")
+    end = time.time()
+
+    messagebox.showinfo(title="訊息", message="處理完成\n花費時間%.2f秒"%(end-start))
     #outputPreviewVar.set(out)
     #print(out)
 
