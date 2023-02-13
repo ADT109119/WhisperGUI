@@ -1,6 +1,6 @@
 # WhisperGUI
 
-![pic](https://user-images.githubusercontent.com/106337749/215111798-2efbd62e-95d9-4bfa-ae52-653896bd3f4f.jpg)
+![pic](https://user-images.githubusercontent.com/106337749/218457960-8deeae85-51f5-490d-be56-02fa8b435fda.png)
 
 > 此專案是我用2個小時簡單製作的WhisperGUI+快速安裝包，可以讓我們在使用Whisper時快速操作，無須打指令，以及讓懶得手動裝一堆東西的人可以快速的使用(Python以及FFmpeg還是要自己裝)。
 
@@ -34,9 +34,9 @@
 
 > 操作示意 選擇檔案>選擇跑模型的裝置>執行完成
 
-![選模型](https://user-images.githubusercontent.com/106337749/215115914-0392e62d-bc41-4694-8b63-01002bf68af4.jpg)
-![選裝置](https://user-images.githubusercontent.com/106337749/215116002-ac2e988c-f0bd-4a25-ac6c-8ec71a3de37f.jpg)
-![執行完成](https://user-images.githubusercontent.com/106337749/215116019-61405444-e634-4640-b62e-9dcd97cc63df.jpg)
+![選模型](https://user-images.githubusercontent.com/106337749/218459288-0fd24ee4-4ed6-49c9-a3f4-1fd97976a89d.png)
+![選裝置](https://user-images.githubusercontent.com/106337749/218459323-faaf2d8d-0a68-4bfc-a6e3-62e45b94ad0f.png)
+![執行完成](https://user-images.githubusercontent.com/106337749/218460468-a801fe68-0f01-479d-a4bd-4f04eea1af41.png)
 
 ## 安裝
 
@@ -78,6 +78,7 @@ ffmpeg -version
 
 - Python
 - tkinter
+- ttkbootstrap
 
 ## 聯絡作者
 
