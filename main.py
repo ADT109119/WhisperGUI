@@ -9,6 +9,9 @@ import subprocess
 import torch
 import time
 
+import ttkbootstrap as ttk
+# from ttkbootstrap.constants import *
+
 #easygui.fileopenbox()
 
 import webbrowser
@@ -96,9 +99,8 @@ def process():
 
 window = tk.Tk()
 window.title('WhisperGUI By The Walking Fish')
-window.geometry('580x200')
+window.geometry('580x230')
 window.resizable(False, False)
-#window.iconbitmap('icon.ico')
 
 label1 = tk.Label(text='選擇音檔')
 label1.place(x=0, y=0)
@@ -125,7 +127,7 @@ usingModel.current(2)
 usingModel.place(x=60, y=60)
 
 label_usingDevice = tk.Label(text='使用裝置')
-label_usingDevice.place(x=0, y=80)
+label_usingDevice.place(x=0, y=90)
 deviceVar = tk.StringVar()
 deviceVar.trace("w", deviceChange)
 usingDevice = tkinter.ttk.Combobox(window, textvariable=deviceVar)
@@ -133,30 +135,30 @@ devices = ['cpu']
 usingDevice['value'] = devices
 detectAvailableDevice()
 usingDevice.current(0)
-usingDevice.place(x=60, y=80)
+usingDevice.place(x=60, y=90)
 
 label_language = tk.Label(text='辨識語言')
-label_language.place(x=0, y=100)
+label_language.place(x=0, y=120)
 languageVar = tk.StringVar()
 usingLanguage = tkinter.ttk.Combobox(window, textvariable=languageVar)
 languages = ['自動偵測', "Afrikaans","Albanian","Amharic","Arabic","Armenian","Assamese","Azerbaijani","Bashkir","Basque","Belarusian","Bengali","Bosnian","Breton","Bulgarian","Burmese","Castilian","Catalan","Chinese","Croatian","Czech","Danish","Dutch","English","Estonian","Faroese","Finnish","Flemish","French","Galician","Georgian","German","Greek","Gujarati","Haitian","Haitian Creole","Hausa","Hawaiian","Hebrew","Hindi","Hungarian","Icelandic","Indonesian","Italian","Japanese","Javanese","Kannada","Kazakh","Khmer","Korean","Lao","Latin","Latvian","Letzeburgesch","Lingala","Lithuanian","Luxembourgish","Macedonian","Malagasy","Malay","Malayalam","Maltese","Maori","Marathi","Moldavian","Moldovan","Mongolian","Myanmar","Nepali","Norwegian","Nynorsk","Occitan","Panjabi","Pashto","Persian","Polish","Portuguese","Punjabi","Pushto","Romanian","Russian","Sanskrit","Serbian","Shona","Sindhi","Sinhala","Sinhalese","Slovak","Slovenian","Somali","Spanish","Sundanese","Swahili","Swedish","Tagalog","Tajik","Tamil","Tatar","Telugu","Thai","Tibetan","Turkish","Turkmen","Ukrainian","Urdu","Uzbek","Valencian","Vietnamese","Welsh","Yiddish","Yoruba"]
 usingLanguage['value'] = languages
 usingLanguage.current(0)
-usingLanguage.place(x=60, y=100)
+usingLanguage.place(x=60, y=120)
 
 translateToEnglishVar = tk.StringVar()
 translateToEnglish = tk.Checkbutton(text="將輸出字幕翻譯為英文", variable=translateToEnglishVar, onvalue="1", offvalue="0")
 translateToEnglish.deselect()
-translateToEnglish.place(x=0, y=120)
+translateToEnglish.place(x=0, y=150)
 
 label_copyright = tk.Label(text='MIT License')
-label_copyright.place(x=0, y=160)
+label_copyright.place(x=0, y=180)
 label_author = tk.Label(text='製作: The Walking Fish')
 label_author.bind("<Button-1>", lambda e: callback("https://www.youtube.com/@the_walking_fish"))
-label_author.place(x=0, y=180)
+label_author.place(x=0, y=200)
 
 
 processButton = tk.Button(text='執行', width=20, command=process)
-processButton.place(anchor='center', x=290, y=180)
+processButton.place(anchor='center', x=290, y=210)
 
 window.mainloop()

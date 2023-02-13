@@ -1,2 +1,3 @@
 easygui
+ttkbootstrap
 openai-whisper
