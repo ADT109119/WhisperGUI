@@ -1,6 +1,6 @@
 # WhisperGUI
 
-![pic](https://user-images.githubusercontent.com/106337749/218457960-8deeae85-51f5-490d-be56-02fa8b435fda.png)
+![pic](https://user-images.githubusercontent.com/106337749/221340883-4b437d03-97fc-42ee-821e-dd04096323fe.png)
 
 > 此專案是我用2個小時簡單製作的WhisperGUI+快速安裝包，可以讓我們在使用Whisper時快速操作，無須打指令，以及讓懶得手動裝一堆東西的人可以快速的使用(Python以及FFmpeg還是要自己裝)。
 
