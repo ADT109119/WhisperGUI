@@ -66,36 +66,41 @@ def process():
 
     start = time.time()
 
-    commandStr = "venv\\Scripts\\whisper"
+    baseCommandStr = "venv\\Scripts\\whisper"
     
     for i in range(displayAudioFilePath.size()):
         path = displayAudioFilePath.get(i)
         print(path)
-        commandStr = commandStr + ' "%s"'%path
+        commandStr = baseCommandStr + ' "%s"'%path
 
-    languageInput = usingLanguage.get()
+        languageInput = usingLanguage.get()
 
-    if languageInput != "自動偵測":
-        commandStr = commandStr + " --language %s "%languageInput
+        if languageInput != "自動偵測":
+            commandStr = commandStr + " --language %s "%languageInput
 
-    deviceInput = deviceDecode()
-    commandStr = commandStr + " --device %s --fp16 False"%deviceInput
+        deviceInput = deviceDecode()
+        commandStr = commandStr + " --device %s --fp16 False"%deviceInput
 
-    commandStr = commandStr + " --model %s "%usingModel.get()
+        commandStr = commandStr + " --model %s "%usingModel.get()
 
-    output_dirInput = output_dir.get()
+        output_dirInput = output_dir.get()
 
-    if output_dirInput != "":
-        commandStr = commandStr + " --output_dir %s "%output_dirInput
+        if outputToTheSamePathAsInputVar.get()=="1":
+            output_dirInput = "/".join(path.split("/")[:-1])
+            # print(output_dirInput)
 
-    commandStr = commandStr + " --model_dir %s "%("model")
+        if output_dirInput != "":
+            commandStr = commandStr + ' --output_dir "%s" '%output_dirInput
 
-    if translateToEnglishVar.get() == '1':
-        commandStr = commandStr + " --task %s "%("translate")
+        commandStr = commandStr + " --model_dir %s "%("model")
 
-    #print(os.system("echo %s"%commandStr))
-    out = subprocess.Popen(commandStr)
-    (out, err) = out.communicate()
+        if translateToEnglishVar.get() == '1':
+            commandStr = commandStr + " --task %s "%("translate")
+
+        # print(os.system("echo %s"%commandStr))
+        # print(commandStr)
+        out = subprocess.Popen(commandStr)
+        (out, err) = out.communicate()
 
     end = time.time()
 
@@ -129,6 +134,11 @@ output_dir.place(x=120, y=30+heightFix_1)
 output_dir.insert(0, os.getcwd() + "\\output")
 selectPhotoPathButton = tk.Button(text='....', command=selectPhotoFolder)
 selectPhotoPathButton.place(x=500, y=30+heightFix_1)
+
+outputToTheSamePathAsInputVar = tk.StringVar()
+outputToTheSamePathAsInput = tk.Checkbutton(text="檔案輸出到與個別輸入檔案相同位置", variable=outputToTheSamePathAsInputVar, onvalue="1", offvalue="0")
+outputToTheSamePathAsInput.deselect()
+outputToTheSamePathAsInput.place(x=300, y=60+heightFix_1)
 
 label_usingModel = tk.Label(text='使用模型')
 label_usingModel.place(x=0, y=60+heightFix_1)
