@@ -4,6 +4,8 @@
 
 > 此專案是我用2個小時簡單製作的WhisperGUI+快速安裝包，可以讓我們在使用Whisper時快速操作，無須打指令，以及讓懶得手動裝一堆東西的人可以快速的使用(Python以及FFmpeg還是要自己裝)。
 
+> 2023.03.30更新 日前有人回報無法抓到GPU的問題，目前推測可能跟CUDA Toolkit有關，若未安裝CUDA Toolkit的人，可嘗試先安裝Nvidia CUDA Toolkit。若已安裝卻還是無法顯示GPU，可嘗試調整Bat檔中的第22行，將安裝的Torch CUDA版本改為與電腦的CUDA Toolkit版本相同。
+
 [OpenAI Whisper](https://github.com/openai/whisper)
 
 ## 專案用途
