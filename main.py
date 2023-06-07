@@ -97,6 +97,10 @@ def process():
         if translateToEnglishVar.get() == '1':
             commandStr = commandStr + " --task %s "%("translate")
 
+
+        if initial_prompt.get() != "":
+            commandStr = commandStr + ' --initial_prompt "%s" '%initial_prompt.get()
+
         # print(os.system("echo %s"%commandStr))
         # print(commandStr)
         out = subprocess.Popen(commandStr)
@@ -113,7 +117,7 @@ heightFix_1 = 60
 
 window = tk.Tk()
 window.title('WhisperGUI By The Walking Fish')
-window.geometry('580x290')
+window.geometry('580x320')
 window.resizable(False, False)
 
 label1 = tk.Label(text='選擇音檔')
@@ -173,14 +177,19 @@ translateToEnglish = tk.Checkbutton(text="將輸出字幕翻譯為英文", varia
 translateToEnglish.deselect()
 translateToEnglish.place(x=0, y=150+heightFix_1)
 
+initial_prompt_label = tk.Label(text='內容提示詞')
+initial_prompt_label.place(x=0, y=180+heightFix_1)
+initial_prompt = tk.Entry(width=55)
+initial_prompt.place(x=80, y=180+heightFix_1)
+
 label_copyright = tk.Label(text='MIT License')
-label_copyright.place(x=0, y=180+heightFix_1)
+label_copyright.place(x=0, y=210+heightFix_1)
 label_author = tk.Label(text='製作: The Walking Fish')
 label_author.bind("<Button-1>", lambda e: callback("https://www.youtube.com/@the_walking_fish"))
-label_author.place(x=0, y=200+heightFix_1)
+label_author.place(x=0, y=230+heightFix_1)
 
 
 processButton = tk.Button(text='執行', width=20, command=process)
-processButton.place(anchor='center', x=290, y=210+heightFix_1)
+processButton.place(anchor='center', x=290, y=240+heightFix_1)
 
 window.mainloop()
