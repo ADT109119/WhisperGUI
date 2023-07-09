@@ -6,9 +6,11 @@ import tkinter.ttk
 from tkinter.constants import *
 from tkinter import messagebox
 import subprocess
+import json
 
 import torch
 import time
+import urllib.request
 
 import ttkbootstrap as ttk
 # from ttkbootstrap.constants import *
@@ -22,9 +24,14 @@ def callback(url):
 
 
 def selectPhotoFolder():
-    photoPath = easygui.diropenbox("字幕存放資料夾")
+    outputDir = easygui.diropenbox("字幕存放資料夾")
     output_dir.delete(0, 'end')
-    output_dir.insert(0, photoPath)
+    output_dir.insert(0, outputDir)
+    config["outputDir"] = outputDir
+    saveConfig("outputDir", outputDir)
+    # with open('config.json', 'w', encoding='utf8') as f:
+    #     json.dump(config, f)
+
 
 def selectAudioFile():
     paths = filedialog.askopenfilenames()
@@ -45,6 +52,11 @@ def detectAvailableDevice():
 def deviceChange(index, value, op):
     #print("%s %s %s"%(index, value, op))
     dev = devices.index(usingDevice.get())
+    config["usingDevice"] = dev
+    saveConfig("usingDevice", dev)
+    # with open('config.json', 'w', encoding='utf8') as f:
+    #     json.dump(config, f)
+
     if dev > 0:
         print("cuda:%s"%(dev-1))
     else:
@@ -57,7 +69,42 @@ def deviceDecode():
     else:
         return("cpu")
 
-    
+def languageChange(index, value, op):
+    transcribeLanguage = languages.index(usingLanguage.get())
+    config["transcribeLanguage"] = transcribeLanguage
+    saveConfig("transcribeLanguage", transcribeLanguage)
+    # with open('config.json', 'w', encoding='utf8') as f:
+    #     json.dump(config, f)
+
+def modelChange(index, value, op):
+    model = models.index(usingModel.get())
+    config["usingModel"] = model
+    saveConfig("usingModel", model)
+    # with open('config.json', 'w', encoding='utf8') as f:
+    #     json.dump(config, f)
+
+def versionCheck(ori): # fetch app version
+    try:
+        url = 'https://raw.githubusercontent.com/ADT109119/WhisperGUI/main/version.txt'
+        response = urllib.request.urlopen(url)
+        fetchVersion = response.read().decode('utf-8')
+        if fetchVersion != "ver 1.7":
+            checkVisitGithub = messagebox.askquestion(title="有新版本", message="目前最新版本為%s\n請問您是否想前往GitHub下載最新版本"%(fetchVersion))
+            if checkVisitGithub == 'yes':
+                callback("https://github.com/ADT109119/WhisperGUI")
+        elif ori == 1:
+            messagebox.showinfo(title="訊息", message="目前版本為最新")
+
+    except:
+        print("無法獲取版本資訊")
+
+def saveConfig(key, value):
+    global config
+    config[key] = value
+    with open('config.json', 'w', encoding='utf8') as f:
+        json.dump(config, f)
+
+
 def process():
     # File = displayAudioFilePath.get(0)
     if displayAudioFilePath.size() == 0:
@@ -112,22 +159,42 @@ def process():
     #outputPreviewVar.set(out)
     #print(out)
 
+# cinfig
+config = {
+    "outputDir": os.getcwd() + "\\output",
+    "usingModel": 2,
+    "usingDevice": 0,
+    "transcribeLanguage": 0,
+    "autoCheckVersion": True
+}
 
-heightFix_1 = 60
+
+if not os.path.exists(".\\config.json"):
+    with open('config.json', 'w', encoding='utf8') as f:
+        json.dump(config, f)
+else:
+    with open('config.json', 'r', encoding='utf8') as f:
+        config = json.load(f)
+
+if config["autoCheckVersion"] == True:
+    versionCheck(0)
+
+
+heightFix_1 = 70
 
 window = tk.Tk()
 window.title('WhisperGUI By The Walking Fish')
-window.geometry('580x320')
+window.geometry('580x330')
 window.resizable(False, False)
 
 label1 = tk.Label(text='選擇音檔')
-label1.place(x=0, y=0)
+label1.place(x=0, y=10)
 displayAudioFilePath = tk.Listbox(width=60, height=5)
-displayAudioFilePath.place(x=80, y=0)
+displayAudioFilePath.place(x=80, y=10)
 selectAudioFileButton = ttk.Button(text='＋添加', command=selectAudioFile)
-selectAudioFileButton.place(x=510, y=10)
+selectAudioFileButton.place(x=510, y=20)
 selectAudioFileButton = ttk.Button(text='－刪除', bootstyle='danger', command=lambda x=displayAudioFilePath: x.delete("active"))
-selectAudioFileButton.place(x=510, y=40)
+selectAudioFileButton.place(x=510, y=50)
 
 
 
@@ -135,7 +202,7 @@ label2 = tk.Label(text='字幕存放資料夾')
 label2.place(x=0, y=30+heightFix_1)
 output_dir = tk.Entry(width=55)
 output_dir.place(x=120, y=30+heightFix_1)
-output_dir.insert(0, os.getcwd() + "\\output")
+output_dir.insert(0, config["outputDir"])
 selectPhotoPathButton = tk.Button(text='....', command=selectPhotoFolder)
 selectPhotoPathButton.place(x=500, y=30+heightFix_1)
 
@@ -147,9 +214,11 @@ outputToTheSamePathAsInput.place(x=300, y=60+heightFix_1)
 label_usingModel = tk.Label(text='使用模型')
 label_usingModel.place(x=0, y=60+heightFix_1)
 var = tk.StringVar()
+var.trace("w", modelChange)
 usingModel = tkinter.ttk.Combobox(window, textvariable=var)
-usingModel['value'] = ('tiny', 'base', 'small', 'medium', 'large', 'large-v1', 'large-v2')
-usingModel.current(2)
+models = ['tiny', 'base', 'small', 'medium', 'large', 'large-v1', 'large-v2']
+usingModel['value'] = models
+usingModel.current(config["usingModel"])
 usingModel.place(x=60, y=60+heightFix_1)
 
 label_usingDevice = tk.Label(text='使用裝置')
@@ -160,16 +229,17 @@ usingDevice = tkinter.ttk.Combobox(window, textvariable=deviceVar)
 devices = ['cpu']
 usingDevice['value'] = devices
 detectAvailableDevice()
-usingDevice.current(0)
+usingDevice.current(config["usingDevice"])
 usingDevice.place(x=60, y=90+heightFix_1)
 
 label_language = tk.Label(text='辨識語言')
 label_language.place(x=0, y=120+heightFix_1)
 languageVar = tk.StringVar()
+languageVar.trace("w", languageChange)
 usingLanguage = tkinter.ttk.Combobox(window, textvariable=languageVar)
 languages = ['自動偵測', "Afrikaans","Albanian","Amharic","Arabic","Armenian","Assamese","Azerbaijani","Bashkir","Basque","Belarusian","Bengali","Bosnian","Breton","Bulgarian","Burmese","Castilian","Catalan","Chinese","Croatian","Czech","Danish","Dutch","English","Estonian","Faroese","Finnish","Flemish","French","Galician","Georgian","German","Greek","Gujarati","Haitian","Haitian Creole","Hausa","Hawaiian","Hebrew","Hindi","Hungarian","Icelandic","Indonesian","Italian","Japanese","Javanese","Kannada","Kazakh","Khmer","Korean","Lao","Latin","Latvian","Letzeburgesch","Lingala","Lithuanian","Luxembourgish","Macedonian","Malagasy","Malay","Malayalam","Maltese","Maori","Marathi","Moldavian","Moldovan","Mongolian","Myanmar","Nepali","Norwegian","Nynorsk","Occitan","Panjabi","Pashto","Persian","Polish","Portuguese","Punjabi","Pushto","Romanian","Russian","Sanskrit","Serbian","Shona","Sindhi","Sinhala","Sinhalese","Slovak","Slovenian","Somali","Spanish","Sundanese","Swahili","Swedish","Tagalog","Tajik","Tamil","Tatar","Telugu","Thai","Tibetan","Turkish","Turkmen","Ukrainian","Urdu","Uzbek","Valencian","Vietnamese","Welsh","Yiddish","Yoruba"]
 usingLanguage['value'] = languages
-usingLanguage.current(0)
+usingLanguage.current(config["transcribeLanguage"])
 usingLanguage.place(x=60, y=120+heightFix_1)
 
 translateToEnglishVar = tk.StringVar()
@@ -188,8 +258,19 @@ label_author = tk.Label(text='製作: The Walking Fish')
 label_author.bind("<Button-1>", lambda e: callback("https://www.youtube.com/@the_walking_fish"))
 label_author.place(x=0, y=230+heightFix_1)
 
-
 processButton = tk.Button(text='執行', width=20, command=process)
 processButton.place(anchor='center', x=290, y=240+heightFix_1)
+
+# menu
+menu = tk.Menu(window)
+settingMenu = tk.Menu(menu)
+autoCheckVar = tk.BooleanVar()
+autoCheckVar.trace("w", lambda index, value, op: saveConfig("autoCheckVersion", autoCheckVar.get()))
+autoCheckVar.set(config["autoCheckVersion"])
+settingMenu.add_checkbutton(label="自動檢查版本", variable=autoCheckVar)
+settingMenu.add_separator()
+settingMenu.add_command(label="檢查版本", command=lambda: versionCheck(1))
+menu.add_cascade(label="setting", menu=settingMenu)
+window.config(menu=menu)
 
 window.mainloop()
