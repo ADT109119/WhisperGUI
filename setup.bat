@@ -19,7 +19,7 @@ goto :EOF
 for /f "delims=" %%V in ('python -V') do @set ver=%%V
 echo Congrats, %ver% is installed...
 python -m venv .\venv
-venv\Scripts\pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
+venv\Scripts\pip install torch==1.13.1 torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
 venv\Scripts\pip install -U -r requirements.txt
 
 PAUSE
