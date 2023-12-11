@@ -88,7 +88,7 @@ def versionCheck(ori): # fetch app version
         url = 'https://raw.githubusercontent.com/ADT109119/WhisperGUI/main/version.txt'
         response = urllib.request.urlopen(url)
         fetchVersion = response.read().decode('utf-8')
-        if fetchVersion != "ver 1.7":
+        if fetchVersion != "ver 1.8":
             checkVisitGithub = messagebox.askquestion(title="有新版本", message="目前最新版本為%s\n請問您是否想前往GitHub下載最新版本"%(fetchVersion))
             if checkVisitGithub == 'yes':
                 callback("https://github.com/ADT109119/WhisperGUI")
@@ -216,7 +216,7 @@ label_usingModel.place(x=0, y=60+heightFix_1)
 var = tk.StringVar()
 var.trace("w", modelChange)
 usingModel = tkinter.ttk.Combobox(window, textvariable=var)
-models = ['tiny', 'base', 'small', 'medium', 'large', 'large-v1', 'large-v2']
+models = ['tiny', 'base', 'small', 'medium', 'large', 'large-v1', 'large-v2', 'large-v3']
 usingModel['value'] = models
 usingModel.current(config["usingModel"])
 usingModel.place(x=60, y=60+heightFix_1)

@@ -1,0 +1,1 @@
+venv\Scripts\pip install -U openai-whisper
