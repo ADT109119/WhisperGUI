@@ -6,7 +6,7 @@
 
 > 2023.03.30更新 日前有人回報無法抓到GPU的問題，目前推測可能跟CUDA Toolkit有關，若未安裝CUDA Toolkit的人，可嘗試先安裝Nvidia CUDA Toolkit。若已安裝卻還是無法顯示GPU，可嘗試調整Bat檔中的第22行，將安裝的Torch CUDA版本改為與電腦的CUDA Toolkit版本相同。
 
-> 2023.08.12更新 目前我有測試打包這個專案成執行檔，不用跑setup.bat創虛擬環境，直接下載下來解壓縮，執行裡面的**main.exe**就可以執行了，大家可以到releases裡下載下來試試看。
+> 2023.08.12更新 目前我有測試打包這個專案成執行檔，不用跑setup.bat創虛擬環境，直接下載下來解壓縮，執行裡面的**main.exe**就可以執行了，大家可以到releases裡下載下來試試看。(打包版經測試無須手動安裝CUDA Toolkit)
 
 [OpenAI Whisper](https://github.com/openai/whisper)
 
