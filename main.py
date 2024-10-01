@@ -19,6 +19,8 @@ import ttkbootstrap as ttk
 
 import webbrowser
 
+import threading
+
 def callback(url):
     webbrowser.open_new(url)
 
@@ -130,6 +132,8 @@ def process():
 
         commandStr = commandStr + " --model %s "%usingModel.get()
 
+        commandStr = commandStr + " -f srt"
+
         output_dirInput = output_dir.get()
 
         if outputToTheSamePathAsInputVar.get()=="1":
@@ -150,12 +154,17 @@ def process():
 
         # print(os.system("echo %s"%commandStr))
         # print(commandStr)
+        processButton["state"] = "disable"
+        
         out = subprocess.Popen(commandStr)
         (out, err) = out.communicate()
+    
 
     end = time.time()
 
     messagebox.showinfo(title="訊息", message="處理完成\n花費時間%.2f秒"%(end-start))
+    processButton["state"] = "normal"
+    saveConfig("prompt", initial_prompt.get())
     #outputPreviewVar.set(out)
     #print(out)
 
@@ -165,7 +174,8 @@ config = {
     "usingModel": 2,
     "usingDevice": 0,
     "transcribeLanguage": 0,
-    "autoCheckVersion": True
+    "autoCheckVersion": True,
+    "prompt": ""
 }
 
 
@@ -235,7 +245,7 @@ usingDevice.place(x=60, y=90+heightFix_1)
 label_language = tk.Label(text='辨識語言')
 label_language.place(x=0, y=120+heightFix_1)
 languageVar = tk.StringVar()
-languageVar.trace("w", languageChange)
+languageVar.trace_add("write", languageChange)
 usingLanguage = tkinter.ttk.Combobox(window, textvariable=languageVar)
 languages = ['自動偵測', "Afrikaans","Albanian","Amharic","Arabic","Armenian","Assamese","Azerbaijani","Bashkir","Basque","Belarusian","Bengali","Bosnian","Breton","Bulgarian","Burmese","Castilian","Catalan","Chinese","Croatian","Czech","Danish","Dutch","English","Estonian","Faroese","Finnish","Flemish","French","Galician","Georgian","German","Greek","Gujarati","Haitian","Haitian Creole","Hausa","Hawaiian","Hebrew","Hindi","Hungarian","Icelandic","Indonesian","Italian","Japanese","Javanese","Kannada","Kazakh","Khmer","Korean","Lao","Latin","Latvian","Letzeburgesch","Lingala","Lithuanian","Luxembourgish","Macedonian","Malagasy","Malay","Malayalam","Maltese","Maori","Marathi","Moldavian","Moldovan","Mongolian","Myanmar","Nepali","Norwegian","Nynorsk","Occitan","Panjabi","Pashto","Persian","Polish","Portuguese","Punjabi","Pushto","Romanian","Russian","Sanskrit","Serbian","Shona","Sindhi","Sinhala","Sinhalese","Slovak","Slovenian","Somali","Spanish","Sundanese","Swahili","Swedish","Tagalog","Tajik","Tamil","Tatar","Telugu","Thai","Tibetan","Turkish","Turkmen","Ukrainian","Urdu","Uzbek","Valencian","Vietnamese","Welsh","Yiddish","Yoruba"]
 usingLanguage['value'] = languages
@@ -249,7 +259,9 @@ translateToEnglish.place(x=0, y=150+heightFix_1)
 
 initial_prompt_label = tk.Label(text='內容提示詞')
 initial_prompt_label.place(x=0, y=180+heightFix_1)
-initial_prompt = tk.Entry(width=55)
+initial_prompt_var = tk.StringVar(value=config.get("prompt"))
+initial_prompt = tk.Entry(width=55, textvariable=initial_prompt_var)
+initial_prompt.pack()
 initial_prompt.place(x=80, y=180+heightFix_1)
 
 label_copyright = tk.Label(text='MIT License')
@@ -258,14 +270,14 @@ label_author = tk.Label(text='製作: The Walking Fish')
 label_author.bind("<Button-1>", lambda e: callback("https://www.youtube.com/@the_walking_fish"))
 label_author.place(x=0, y=230+heightFix_1)
 
-processButton = tk.Button(text='執行', width=20, command=process)
+processButton = tk.Button(text='執行', width=20, command=threading.Thread(target=process).start)
 processButton.place(anchor='center', x=290, y=240+heightFix_1)
 
 # menu
 menu = tk.Menu(window)
 settingMenu = tk.Menu(menu)
 autoCheckVar = tk.BooleanVar()
-autoCheckVar.trace("w", lambda index, value, op: saveConfig("autoCheckVersion", autoCheckVar.get()))
+autoCheckVar.trace_add("write", lambda index, value, op: saveConfig("autoCheckVersion", autoCheckVar.get()))
 autoCheckVar.set(config["autoCheckVersion"])
 settingMenu.add_checkbutton(label="自動檢查版本", variable=autoCheckVar)
 settingMenu.add_separator()
