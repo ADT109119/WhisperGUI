@@ -90,7 +90,7 @@ def versionCheck(ori): # fetch app version
         url = 'https://raw.githubusercontent.com/ADT109119/WhisperGUI/main/version.txt'
         response = urllib.request.urlopen(url)
         fetchVersion = response.read().decode('utf-8')
-        if fetchVersion != "ver 1.8":
+        if fetchVersion != "ver 1.9":
             checkVisitGithub = messagebox.askquestion(title="有新版本", message="目前最新版本為%s\n請問您是否想前往GitHub下載最新版本"%(fetchVersion))
             if checkVisitGithub == 'yes':
                 callback("https://github.com/ADT109119/WhisperGUI")
